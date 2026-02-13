@@ -1,12 +1,12 @@
 <?php
-	$creds = require "database.php";
+	require "database.php";
 
 	$inData = getRequestInfo();
 	
 	$color = $inData["color"];
 	$userId = $inData["userId"];
 
-	$conn = new mysqli($creds["host"], $creds["username"], $creds["password"], $creds["database"]);
+	$conn = new mysqli(host, username, password, database);
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
