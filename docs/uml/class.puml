@@ -1,0 +1,25 @@
+@startuml class
+
+skinparam class {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+
+class Users {
+  - ID : INT
+  - FirstName : String
+  - LastName : String
+  - Login : String
+  - Password : String
+}
+
+class Colors {
+  - ID : INT
+  - Name : String
+  - UserID : INT
+}
+
+Users "1" -- "0..*" Colors : owns >
+
+@enduml
