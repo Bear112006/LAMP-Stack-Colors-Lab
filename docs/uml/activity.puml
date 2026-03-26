@@ -1,0 +1,63 @@
+@startuml activity
+
+|User / Browser|
+start
+:Visit Application (index.html);
+:Enter Login Credentials;
+:Click "Do It";
+
+|PHP Backend|
+:Receive POST - Login.php;
+:Query Users table\n(login + password match);
+if (Credentials Valid?) then (yes)
+  :Return JSON\n{id, firstName, lastName};
+else (no)
+  :Return JSON {id:0};
+  |User / Browser|
+  :Display "User/Password combination incorrect";
+  stop
+endif
+
+|User / Browser|
+:Save session cookie\n(saveCookie);
+:Redirect to color.html;
+:Read cookie (readCookie);
+:View Color Dashboard;
+if (Action?) then (Add Color)
+  :Enter Color Name;
+  :Click "Add Color";
+  |PHP Backend|
+  :Receive POST - AddColor.php;
+  :INSERT into Colors table;
+  :Return JSON {error:""};
+  |User / Browser|
+  :Display "Color has been added";
+else (Search Color)
+  :Enter Search Term;
+  :Click "Search Color";
+  |PHP Backend|
+  :Receive POST - SearchColors.php;
+  :SELECT from Colors table\n(LIKE match + UserID filter);
+  if (Colors Found?) then (yes)
+    :Return JSON {results:[...]};
+    |User / Browser|
+    :Display results list;
+  else (no)
+    :Return JSON {error:"No Records Found"};
+    |User / Browser|
+    :Display HTTP error / no output;
+  endif
+endif
+
+|User / Browser|
+if (Continue Using App?) then (yes)
+  :Perform Another Action;
+else (no)
+  :Click "Log Out";
+  :Clear cookie (doLogout);
+  :Redirect to index.html;
+endif
+
+stop
+
+@enduml
