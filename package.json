@@ -1,0 +1,35 @@
+{
+  "name": "lamp-stack-colors-lab",
+  "version": "1.0.0",
+  "description": "GitHub Repository for my Assignment 1 submission, Version Control with GitHub. Contained within this repository is my implementation of the LAMP Stack COLORS Lab as outlined in [1.4] Getting Started with LAMP.pdf.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "lint:js": "eslint .",
+    "lint:html": "htmlhint \"**/*.html\"",
+    "lint:css": "stylelint \"**/*.css\"",
+    "lint": "npm run lint:js && npm run lint:html && npm run lint:css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bear112006/LAMP-Stack-Colors-Lab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Bear112006/LAMP-Stack-Colors-Lab/issues"
+  },
+  "homepage": "https://github.com/Bear112006/LAMP-Stack-Colors-Lab#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "htmlhint": "^1.9.2",
+    "stylelint": "^17.6.0",
+    "stylelint-config-standard": "^40.0.0"
+  }
+}
