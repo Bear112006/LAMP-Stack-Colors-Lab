@@ -1,5 +1,5 @@
 <?php
-	require "database.php";
+	require "database_config.php";
 
 	$inData = getRequestInfo();
 	
@@ -14,8 +14,16 @@
 	else
 	{
 		$stmt = $conn->prepare("select Name from Colors where Name like ? and UserID=?");
+		if( !$stmt )
+		{
+			returnWithError( $conn->error );
+			$conn->close();
+			return;
+		}
+
 		$colorName = "%" . $inData["search"] . "%";
-		$stmt->bind_param("ss", $colorName, $inData["userId"]);
+		$userId = (int)$inData["userId"];
+		$stmt->bind_param("si", $colorName, $userId);
 		$stmt->execute();
 		
 		$result = $stmt->get_result();

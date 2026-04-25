@@ -1,6 +1,6 @@
 
 <?php
-	require "database.php";
+	require "database_config.php";
 
 	$inData = getRequestInfo();
 	
