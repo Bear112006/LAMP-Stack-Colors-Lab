@@ -14,9 +14,13 @@ test("integration: Login.php returns valid JSON for a real user", async () => {
     })
   });
 
-  const data = await response.json();
+  const text = await response.text();
+  console.log("PHP response:", text);
 
   expect(response.status).toBe(200);
+
+  const data = JSON.parse(text);
+
   expect(data).toHaveProperty("id");
   expect(data).toHaveProperty("firstName");
   expect(data).toHaveProperty("lastName");
