@@ -24,7 +24,16 @@
 		$colorName = "%" . $inData["search"] . "%";
 		$userId = (int)$inData["userId"];
 		$stmt->bind_param("si", $colorName, $userId);
-		$stmt->execute();
+		$didExecute = $stmt->execute();
+
+		if( !$didExecute )
+		{
+			$error = $stmt->error ?: $conn->error;
+			$stmt->close();
+			$conn->close();
+			returnWithError( $error );
+			return;
+		}
 		
 		$result = $stmt->get_result();
 		

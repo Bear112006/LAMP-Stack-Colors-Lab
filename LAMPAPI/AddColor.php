@@ -23,7 +23,17 @@
 
 		$userId = (int)$userId;
 		$stmt->bind_param("is", $userId, $color);
-		$stmt->execute();
+		$didExecute = $stmt->execute();
+
+		if( !$didExecute )
+		{
+			$error = $stmt->error ?: $conn->error;
+			$stmt->close();
+			$conn->close();
+			returnWithError( $error );
+			return;
+		}
+
 		$stmt->close();
 		$conn->close();
 		returnWithError("");

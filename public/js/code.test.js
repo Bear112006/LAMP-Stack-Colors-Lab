@@ -32,7 +32,20 @@ beforeEach(() => {
     })
   }));
 
-  window.eval(code);
+  const script = document.createElement("script");
+  script.textContent = `
+    (() => {
+      ${code}
+      window.doLogin = doLogin;
+      window.saveCookie = saveCookie;
+      window.readCookie = readCookie;
+      window.doLogout = doLogout;
+      window.addColor = addColor;
+      window.searchColor = searchColor;
+    })();
+  `;
+  document.body.appendChild(script);
+  script.remove();
 });
 
 test("unit: addColor sends the typed color and shows success message", () => {

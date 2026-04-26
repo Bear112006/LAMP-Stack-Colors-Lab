@@ -62,7 +62,15 @@ jobs:
         run: DB_HOST=127.0.0.1 DB_NAME=COP4331_TEST DB_USER=TheBeast DB_PASS=WeLoveCOP4331 php -S 127.0.0.1:8000 -t . &
 
       - name: Wait for PHP server
-        run: sleep 2
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:8000/public/index.html; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "PHP server did not become ready in time."
+          exit 1
 
       - name: Run tests
         run: npm test
