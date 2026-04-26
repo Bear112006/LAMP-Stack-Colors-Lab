@@ -5,7 +5,24 @@ on:
   pull_request:
 
 jobs:
-  lint-and-test:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linters
+        run: npm run lint
+
+  test:
     runs-on: ubuntu-latest
 
     services:
@@ -37,9 +54,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run linters
-        run: npm run lint
 
       - name: Setup test database
         run: mysql -h 127.0.0.1 -uroot -proot < LAMPAPI/testSchema.sql
