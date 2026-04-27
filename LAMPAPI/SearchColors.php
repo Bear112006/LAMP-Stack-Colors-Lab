@@ -13,15 +13,29 @@
 	} 
 	else
 	{
+		if(
+			!isset($inData["search"]) ||
+			!is_string($inData["search"]) ||
+			trim($inData["search"]) === "" ||
+			!isset($inData["userId"]) ||
+			!is_numeric($inData["userId"])
+		)
+		{
+			$conn->close();
+			returnWithError( "Invalid search request" );
+			return;
+		}
+
 		$stmt = $conn->prepare("select Name from Colors where Name like ? and UserID=?");
 		if( !$stmt )
 		{
-			returnWithError( $conn->error );
+			error_log( "SearchColors prepare failed: " . $conn->error );
+			returnWithError( "Database error" );
 			$conn->close();
 			return;
 		}
 
-		$colorName = "%" . $inData["search"] . "%";
+		$colorName = "%" . trim($inData["search"]) . "%";
 		$userId = (int)$inData["userId"];
 		$stmt->bind_param("si", $colorName, $userId);
 		$didExecute = $stmt->execute();
@@ -29,9 +43,10 @@
 		if( !$didExecute )
 		{
 			$error = $stmt->error ?: $conn->error;
+			error_log( "SearchColors execute failed: " . $error );
 			$stmt->close();
 			$conn->close();
-			returnWithError( $error );
+			returnWithError( "Database error" );
 			return;
 		}
 		

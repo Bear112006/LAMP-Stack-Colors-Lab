@@ -7,6 +7,7 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -24,10 +25,16 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DB_HOST: 127.0.0.1
+      DB_NAME: COP4331_TEST
+      DB_USER: TheBeast
+      DB_PASS: WeLoveCOP4331
 
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8.0.46
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
@@ -59,7 +66,7 @@ jobs:
         run: mysql -h 127.0.0.1 -uroot -proot < LAMPAPI/testSchema.sql
 
       - name: Start PHP server
-        run: DB_HOST=127.0.0.1 DB_NAME=COP4331_TEST DB_USER=TheBeast DB_PASS=WeLoveCOP4331 php -S 127.0.0.1:8000 -t . &
+        run: php -S 127.0.0.1:8000 -t . &
 
       - name: Wait for PHP server
         run: |
