@@ -79,6 +79,36 @@ test("integration: SearchColors.php returns seeded colors for the logged in user
   expect(data.results).toContain("Blue");
 });
 
+test("integration: SearchColors.php allows a blank search to return user colors", async () => {
+  const loginResult = await loginAsTestUser();
+
+  const { response, data, parseError, text } = await postJson("SearchColors.php", {
+    search: "",
+    userId: loginResult.data.id
+  });
+
+  expect(response.status).toBe(200);
+  expect(parseError).toBeNull();
+  expect(text).toBeTruthy();
+  expect(data.error).toBe("");
+  expect(data.results).toContain("Blue");
+});
+
+test("integration: SearchColors.php trims whitespace around search terms", async () => {
+  const loginResult = await loginAsTestUser();
+
+  const { response, data, parseError, text } = await postJson("SearchColors.php", {
+    search: " Blue ",
+    userId: loginResult.data.id
+  });
+
+  expect(response.status).toBe(200);
+  expect(parseError).toBeNull();
+  expect(text).toBeTruthy();
+  expect(data.error).toBe("");
+  expect(data.results).toContain("Blue");
+});
+
 test("integration: AddColor.php persists a color that can be searched", async () => {
   const loginResult = await loginAsTestUser();
 

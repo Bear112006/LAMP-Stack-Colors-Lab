@@ -16,7 +16,6 @@
 		if(
 			!isset($inData["search"]) ||
 			!is_string($inData["search"]) ||
-			trim($inData["search"]) === "" ||
 			!isset($inData["userId"]) ||
 			!is_numeric($inData["userId"])
 		)
@@ -35,7 +34,8 @@
 			return;
 		}
 
-		$colorName = "%" . trim($inData["search"]) . "%";
+		$searchTerm = trim($inData["search"]);
+		$colorName = "%" . $searchTerm . "%";
 		$userId = (int)$inData["userId"];
 		$stmt->bind_param("si", $colorName, $userId);
 		$didExecute = $stmt->execute();

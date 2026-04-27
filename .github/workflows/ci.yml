@@ -29,8 +29,8 @@ jobs:
     env:
       DB_HOST: 127.0.0.1
       DB_NAME: COP4331_TEST
-      DB_USER: root
-      DB_PASS: root
+      DB_USER: TheBeast
+      DB_PASS: WeLoveCOP4331
 
     services:
       mysql:
