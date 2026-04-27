@@ -35,9 +35,14 @@ async function loginAsTestUser() {
     password: "testpass"
   });
 
-  expect(loginResult.response.status).toBe(200);
-  expect(loginResult.parseError).toBeNull();
-  expect(loginResult.data).not.toBeNull();
+  if (loginResult.response.status !== 200) {
+    throw new Error(`Login.php returned ${loginResult.response.status}: ${loginResult.text}`);
+  }
+
+  if (loginResult.parseError !== null || loginResult.data === null) {
+    throw new Error(`Login.php returned invalid JSON: ${loginResult.text}`);
+  }
+
   expect(loginResult.data.error).toBe("");
   expect(loginResult.data.id).toBeGreaterThan(0);
 
