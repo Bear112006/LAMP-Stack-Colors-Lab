@@ -1,5 +1,5 @@
 <?php
-	require "database.php";
+	require "database_config.php";
 
 	$inData = getRequestInfo();
 	
@@ -14,8 +14,26 @@
 	else
 	{
 		$stmt = $conn->prepare("INSERT into Colors (UserId,Name) VALUES(?,?)");
-		$stmt->bind_param("ss", $userId, $color);
-		$stmt->execute();
+		if( !$stmt )
+		{
+			returnWithError( $conn->error );
+			$conn->close();
+			return;
+		}
+
+		$userId = (int)$userId;
+		$stmt->bind_param("is", $userId, $color);
+		$didExecute = $stmt->execute();
+
+		if( !$didExecute )
+		{
+			$error = $stmt->error ?: $conn->error;
+			$stmt->close();
+			$conn->close();
+			returnWithError( $error );
+			return;
+		}
+
 		$stmt->close();
 		$conn->close();
 		returnWithError("");

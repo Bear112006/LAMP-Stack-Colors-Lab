@@ -1,5 +1,5 @@
 <?php
-	require "database.php";
+	require "database_config.php";
 
 	$inData = getRequestInfo();
 	
@@ -13,10 +13,42 @@
 	} 
 	else
 	{
+		if(
+			!isset($inData["search"]) ||
+			!is_string($inData["search"]) ||
+			!isset($inData["userId"]) ||
+			!is_numeric($inData["userId"])
+		)
+		{
+			$conn->close();
+			returnWithError( "Invalid search request" );
+			return;
+		}
+
 		$stmt = $conn->prepare("select Name from Colors where Name like ? and UserID=?");
-		$colorName = "%" . $inData["search"] . "%";
-		$stmt->bind_param("ss", $colorName, $inData["userId"]);
-		$stmt->execute();
+		if( !$stmt )
+		{
+			error_log( "SearchColors prepare failed: " . $conn->error );
+			returnWithError( "Database error" );
+			$conn->close();
+			return;
+		}
+
+		$searchTerm = trim($inData["search"]);
+		$colorName = "%" . $searchTerm . "%";
+		$userId = (int)$inData["userId"];
+		$stmt->bind_param("si", $colorName, $userId);
+		$didExecute = $stmt->execute();
+
+		if( !$didExecute )
+		{
+			$error = $stmt->error ?: $conn->error;
+			error_log( "SearchColors execute failed: " . $error );
+			$stmt->close();
+			$conn->close();
+			returnWithError( "Database error" );
+			return;
+		}
 		
 		$result = $stmt->get_result();
 		
