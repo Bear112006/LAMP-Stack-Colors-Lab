@@ -35,3 +35,6 @@ VARCHAR(50) NOT NULL DEFAULT '' , `UserID` INT NOT NULL DEFAULT '0' , PRIMARY KE
 - Access your site using either your raw IP address or through your connected domain! As stated above, a server will be needed to run your lab application. A LAMP droplet running as a server is recommended for this project.
 
 The instructions above assume basic knowledge of the command line or terminal on Windows or Linux systems. Setup may vary depending on the operating system. AI was not knowingly used to develop this code or README file, however, nearly all code is adopted from our course modules (credits to Aashish Yadavally and other authors as applicable). 
+
+# AI Usage Disclaimer
+- AI tools, notably CodeRabbit and Codex, were used to develop and debug parts of this code related to testing. Prompts for potential issued found by CodeRabbit AI were sent to Codex to debug and correct, with minimal changes needed.
